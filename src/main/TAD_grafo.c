@@ -54,7 +54,7 @@ void adicionar_aresta(Grafo* g, int u, int v) {
 Grafo* gerar_grafo_conexo(int V, float grau_conectividade) {
     Grafo* g = criar_grafo(V);
     
-    // garantindo que o grafo não seja desconexo criando um caminho base [
+    // garantindo que o grafo não seja desconexo criando um caminho base 
     for (int i = 0; i < V - 1; i++) {
         adicionar_aresta(g, i, i + 1);
     }
@@ -165,4 +165,54 @@ void liberar_grafo(Grafo* g) {
     }
     free(g->adj);
     free(g);
+}
+
+void imprimir_caminho(int *caminho, int tamanho, int *contador) {
+    (*contador)++;
+    printf("Caminho %d: ", *contador);
+    for (int i = 0; i < tamanho; i++) {
+        printf("%d", caminho[i]);
+        if (i < tamanho - 1) printf(" -> ");
+    }
+    printf("\n");
+}
+
+// função recursiva com Backtracking
+void dfs_todos_caminhos(Grafo *g, int atual, int *visitado, int *caminho, int tamanhoCaminho, int *contador) {
+    visitado[atual] = 1;
+    caminho[tamanhoCaminho] = atual;
+    tamanhoCaminho++;
+
+    // se o caminho atingiu o total de vértices, imprime
+    if (tamanhoCaminho == g->V) {
+        imprimir_caminho(caminho, tamanhoCaminho, contador);
+    } else {
+        // Tenta continuar por cada vizinho não visitado
+        No *vizinho = g->adj[atual];
+        while (vizinho != NULL) {
+            if (!visitado[vizinho->vertice]) {
+                dfs_todos_caminhos(g, vizinho->vertice, visitado, caminho, tamanhoCaminho, contador);
+            }
+            vizinho = vizinho->prox;
+        }
+    }
+    // Backtracking: desmarca para permitir que o vértice participe de outras rotas
+    visitado[atual] = 0;
+}
+
+void todos_os_caminhos(Grafo *g, int origem) {
+    int *visitado = (int*) calloc(g->V, sizeof(int));
+    int *caminho = (int*) malloc(g->V * sizeof(int));
+    int contador = 0;
+
+    dfs_todos_caminhos(g, origem, visitado, caminho, 0, &contador);
+
+    if (contador == 0) {
+        printf("Nenhum caminho encontrado que visite todos os vertices a partir do vertice %d.\n", origem);
+    } else {
+        printf("Total de caminhos completos encontrados: %d\n", contador);
+    }
+
+    free(visitado);
+    free(caminho);
 }

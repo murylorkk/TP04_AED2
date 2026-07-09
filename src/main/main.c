@@ -13,6 +13,7 @@ int main() {
         printf("==================================================\n");
         printf("1 - Questao 1: Gerar Grafo e Mostrar Estrutura\n");
         printf("2 - Questao 2: Busca em Largura (Mostrar Arvore Resultante)\n");
+        printf("4 - Questao 2: Todos os caminhos usando busca em profundidade\n");        
         printf("0 - Sair\n");
         printf("==================================================\n");
         printf("Escolha uma opcao: ");
@@ -77,6 +78,36 @@ int main() {
                     
                     liberar_grafo(g_tempo);
                 }
+                break;
+            }
+            case 4: {
+                printf("\n--- EXECUTANDO QUESTAO 4: TODOS OS CAMINHOS ---\n");
+                
+                printf("\n> Exemplo 1: Grafo em linha (0-1-2-3)\n");
+                Grafo *g_linha = criar_grafo(4);
+                adicionar_aresta(g_linha, 0, 1);
+                adicionar_aresta(g_linha, 1, 2);
+                adicionar_aresta(g_linha, 2, 3);
+                todos_os_caminhos(g_linha, 0);
+                liberar_grafo(g_linha);
+
+                printf("\n> Exemplo 2: Grafo completo K4 (Todos conectados a todos)\n");
+                Grafo *g_completo = criar_grafo(4);
+                adicionar_aresta(g_completo, 0, 1);
+                adicionar_aresta(g_completo, 0, 2);
+                adicionar_aresta(g_completo, 0, 3);
+                adicionar_aresta(g_completo, 1, 2);
+                adicionar_aresta(g_completo, 1, 3);
+                adicionar_aresta(g_completo, 2, 3);
+                todos_os_caminhos(g_completo, 0);
+                liberar_grafo(g_completo);
+
+                printf("\n> Exemplo 3: Grafo com 5 vertices (Gerado automaticamente)\n");
+                Grafo *g_auto = gerar_grafo_conexo(5, 0.50);
+                imprimir_grafo(g_auto); // Mostra a estrutura para conferência
+                todos_os_caminhos(g_auto, 0);
+                liberar_grafo(g_auto);
+                
                 break;
             }
             case 0:

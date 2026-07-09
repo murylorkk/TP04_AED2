@@ -29,4 +29,8 @@ void imprimir_grafo(Grafo* g);
 
 void liberar_grafo(Grafo* g);
 
+void todos_os_caminhos(Grafo* g, int origem);
+
+void dfs_todos_caminhos(Grafo *g, int atual, int *visitado, int *caminho, int tamanhoCaminho, int *contador);
+
 #endif // TAD_GRAFO_H
