@@ -4,11 +4,43 @@
 #include <time.h>
 #include "TAD_grafo.h" 
 
+// ============================================================================
+// ESTRUTURAS OCULTAS (Encapsulamento real)
+// Nenhuma função fora deste ficheiro sabe o que o Grafo tem por dentro.
+// ============================================================================
+
+typedef struct No {
+    int vertice;
+    struct No* prox;
+} No;
+
+struct Grafo {
+    int V; 
+    int E_totais; 
+    No** adj; 
+};
+
+// ============================================================================
+// FUNÇÕES GETTER
+// ============================================================================
+
+int obter_num_vertices(Grafo* g) {
+    return g->V;
+}
+
+int obter_num_arestas(Grafo* g) {
+    return g->E_totais;
+}
+
+// ============================================================================
+// IMPLEMENTAÇÃO DAS OPERAÇÕES
+// ============================================================================
+
 // cria um grafo com V vértices
 Grafo* criar_grafo(int V) {
     Grafo* g = (Grafo*)malloc(sizeof(Grafo));
     if (g == NULL) {
-        printf("Erro de alocação de memória para o grafo.\n");
+        printf("Erro de alocacao de memoria para o grafo.\n");
         exit(1);
     }
     
@@ -215,4 +247,85 @@ void todos_os_caminhos(Grafo *g, int origem) {
 
     free(visitado);
     free(caminho);
+}
+
+void dfs_recursiva(Grafo* g, int u, bool* visitados, bool imprimir) {
+    visitados[u] = true;
+    if (imprimir) {
+        printf("%d ", u);
+    }
+    
+    No* adjacente = g->adj[u];
+    while (adjacente != NULL) {
+        int v = adjacente->vertice;
+        if (!visitados[v]) {
+            dfs_recursiva(g, v, visitados, imprimir);
+        }
+        adjacente = adjacente->prox;
+    }
+}
+
+void dfs_profundidade(Grafo* g, int inicio, bool imprimir) {
+    bool* visitados = (bool*)calloc(g->V, sizeof(bool));
+    dfs_recursiva(g, inicio, visitados, imprimir);
+    if (imprimir) {
+        printf("\n");
+    }
+    free(visitados);
+}
+
+void testar_tempos_dfs(Grafo* g, int qtd_buscas) {
+    double tempo_total = 0.0;
+    printf("\n--- Testando %d Buscas em Profundidade ---\n", qtd_buscas);
+    for (int i = 0; i < qtd_buscas; i++) {
+        int origem = rand() % g->V;
+        
+        clock_t start = clock();
+        dfs_profundidade(g, origem, false); 
+        clock_t end = clock();
+        
+        double tempo_gasto = (double)(end - start) / CLOCKS_PER_SEC;
+        tempo_total += tempo_gasto;
+        
+        printf("Busca %d (Origem %d): %f segundos\n", i + 1, origem, tempo_gasto);
+    }
+    printf("\n=> Tempo medio das buscas em profundidade: %f segundos\n", tempo_total / qtd_buscas);
+}
+
+bool dfs_detecta_ciclo(Grafo *g, int atual, int pai, bool *visitado) {
+    visitado[atual] = true;
+
+    No *vizinho = g->adj[atual];
+    while (vizinho != NULL) {
+        int v = vizinho->vertice;
+
+        if (!visitado[v]) {
+            if (dfs_detecta_ciclo(g, v, atual, visitado)) {
+                return true;
+            }
+        }
+        else if (v != pai) {
+            return true;
+        }
+
+        vizinho = vizinho->prox;
+    }
+
+    return false;
+}
+
+bool grafo_tem_ciclo(Grafo *g) {
+    bool *visitado = (bool*) calloc(g->V, sizeof(bool));
+
+    for (int i = 0; i < g->V; i++) {
+        if (!visitado[i]) {
+            if (dfs_detecta_ciclo(g, i, -1, visitado)) {
+                free(visitado);
+                return true;
+            }
+        }
+    }
+
+    free(visitado);
+    return false;
 }
