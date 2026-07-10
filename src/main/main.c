@@ -12,10 +12,15 @@ int main() {
         printf(" TRABALHO PRATICO 4 - AED 2 (Busca em Grafos)\n");
         printf("==================================================\n");
         printf("1 - Questao 1: Gerar Grafo e Mostrar Estrutura\n");
+<<<<<<< HEAD
         printf("2 - Questao 2: Busca em Largura\n");
         printf("3 - Questao 3: Busca em Profundidade\n");
         printf("4 - Questao 4: Todos os caminhos usando DFS\n");
         printf("5 - Questao 5: Deteccao de ciclos\n");
+=======
+        printf("2 - Questao 2: Busca em Largura (Mostrar Arvore Resultante)\n");
+        printf("4 - Questao 4: Todos os caminhos usando busca em profundidade\n");        
+>>>>>>> b79da79ecd42fdcff8474b26a7a59721cf4b7262
         printf("0 - Sair\n");
         printf("==================================================\n");
         printf("Escolha uma opcao: ");
