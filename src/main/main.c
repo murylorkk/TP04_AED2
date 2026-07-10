@@ -13,7 +13,7 @@ int main() {
         printf("==================================================\n");
         printf("1 - Questao 1: Gerar Grafo e Mostrar Estrutura\n");
         printf("2 - Questao 2: Busca em Largura (Mostrar Arvore Resultante)\n");
-        printf("4 - Questao 2: Todos os caminhos usando busca em profundidade\n");        
+        printf("4 - Questao 4: Todos os caminhos usando busca em profundidade\n");        
         printf("0 - Sair\n");
         printf("==================================================\n");
         printf("Escolha uma opcao: ");
